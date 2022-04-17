@@ -8,4 +8,7 @@
     <item
         android:id="@+id/galleryFragment"
         android:title="@string/gallery_button_text" />
+    <item
+        android:id="@+id/cameraFragment"
+        android:title="@string/camera" />
 </menu>
