@@ -10,6 +10,7 @@ ext {
     navigationVersion = "2.4.2"
     cameraxVersion = "1.1.0-beta03"
     version = '1.7.0-alpha01'
+    roomVersion = "2.4.2"
 }
 
 task clean(type: Delete) {
