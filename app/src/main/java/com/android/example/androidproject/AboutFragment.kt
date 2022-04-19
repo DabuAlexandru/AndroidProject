@@ -1,10 +1,14 @@
 package com.android.example.androidproject
 
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
+import android.widget.VideoView
 import androidx.databinding.DataBindingUtil
 import com.android.example.androidproject.databinding.FragmentAboutBinding
 
@@ -37,8 +41,26 @@ class AboutFragment : Fragment() {
     ): View? {
         val binding = DataBindingUtil.inflate<FragmentAboutBinding>(inflater,
             R.layout.fragment_about,container,false)
+
+        val context : Context = requireContext()
+        val videoView : VideoView = binding.videoExample
+
+        val mediaController = MediaController(context)
+        mediaController.setAnchorView(videoView)
+
+        val videoExampleUri: Uri = Uri.parse("https://cdn.videvo.net/videvo_files/video/premium/video0230/large_watermarked/MR_Stock%20Footage%20MR%20(490)_preview.mp4")
+        videoView.setMediaController(mediaController)
+        videoView.setVideoURI(videoExampleUri)
+        videoView.requestFocus()
+        videoView.start()
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+
     }
 
     companion object {

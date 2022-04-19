@@ -10,4 +10,5 @@
     <string name="stop_capture">Stop Capture</string>
     <string name="camera">Camera</string>
     <string name="share_button_text">share</string>
+    <string name="about_title_text">Find more about the app</string>
 </resources>
