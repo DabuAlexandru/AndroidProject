@@ -11,18 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.example.androidproject.R
 import com.android.example.androidproject.database.MemoryEntity
 
-class MemoryEntityAdapter : RecyclerView.Adapter<MemoryEntityAdapter.ViewHolder>() {
+class MemoryEntityAdapter(var memoriesList: List<MemoryEntity>) : RecyclerView.Adapter<MemoryEntityAdapter.ViewHolder>() {
 
-    var data = listOf<MemoryEntity>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun getItemCount() = data.size
+    override fun getItemCount() = memoriesList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
+        val item = memoriesList[position]
         holder.bind(item)
     }
 

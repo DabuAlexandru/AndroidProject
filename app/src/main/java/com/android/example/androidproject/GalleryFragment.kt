@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.example.androidproject.database.MemoriesDatabase
+import com.android.example.androidproject.database.MemoryEntity
 import com.android.example.androidproject.databinding.FragmentGalleryBinding
 import com.android.example.androidproject.memories.MemoriesViewModel
 import com.android.example.androidproject.memories.MemoriesViewModelFactory
@@ -30,6 +32,9 @@ class GalleryFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var memoriesList : MutableList<MemoryEntity> = ArrayList()
+    private lateinit var adapter: MemoryEntityAdapter
+    private lateinit var memoriesViewModel: MemoriesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,25 +52,31 @@ class GalleryFragment : Fragment() {
             inflater,
             R.layout.fragment_gallery, container, false
         )
-        val adapter = MemoryEntityAdapter()
+
+        adapter = MemoryEntityAdapter(memoriesList)
         binding.memoriesList.adapter = adapter
 
         val application = requireNotNull(this.activity).application
         val dataSource = MemoriesDatabase.getInstance(application).memoriesDatabaseDao
         val viewModelFactory = MemoriesViewModelFactory(dataSource, application)
-        val memoriesViewModel =
-            ViewModelProvider(this, viewModelFactory)[MemoriesViewModel::class.java]
-
-        memoriesViewModel.memories.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.data = it
-            }
+        memoriesViewModel = ViewModelProvider(this, viewModelFactory)[MemoriesViewModel::class.java]
+        memoriesViewModel.memories.observe(viewLifecycleOwner, Observer { item ->
+            updateRecyclerView(item, "")
         })
 
+        binding.searchMemories.doOnTextChanged { text, start, before, count ->
+            memoriesViewModel.memories.value?.let { updateRecyclerView(it, text.toString()) }
+        }
 
         binding.setLifecycleOwner(this)
         binding.memoriesViewModel = memoriesViewModel
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    private fun updateRecyclerView(memories: List<MemoryEntity>, searchQuery: String) {
+        memoriesList.clear()
+        memoriesList.addAll(memories.filter{ it.description.lowercase().contains(searchQuery.lowercase()) })
+        adapter.notifyDataSetChanged()
     }
 }
