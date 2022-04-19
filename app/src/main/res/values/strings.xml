@@ -9,4 +9,5 @@
     <string name="start_capture">Start Capture</string>
     <string name="stop_capture">Stop Capture</string>
     <string name="camera">Camera</string>
+    <string name="share_button_text">share</string>
 </resources>
