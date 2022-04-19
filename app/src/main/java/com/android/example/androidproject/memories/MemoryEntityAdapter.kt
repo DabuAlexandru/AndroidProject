@@ -34,9 +34,10 @@ class MemoryEntityAdapter(var memoriesList: List<MemoryEntity>) : RecyclerView.A
         val shareMemoryButton: Button = itemView.findViewById(R.id.share_memory)
 
         fun bind(item: MemoryEntity) {
+            val date : String = DateFormat.format("dd-MM-yyyy HH:mm", item.timestamp).toString()
             memoryImage.setImageURI(item.imageURI.toUri())
             memoryDescription.text = item.description
-            memoryTimestamp.text = DateFormat.format("dd-MM-yyyy HH:mm", item.timestamp).toString()
+            memoryTimestamp.text = date
             shareMemoryButton.setOnClickListener {
                 ShareCompat.IntentBuilder.from(shareMemoryButton.context as Activity)
                     .setStream(item.imageURI.toUri())

@@ -1,5 +1,6 @@
 package com.android.example.androidproject.database
 
+import android.text.format.DateFormat
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,7 +12,7 @@ data class MemoryEntity(
     val memoryId: Long = 0L,
 
     @ColumnInfo(name="description")
-    val description: String = "",
+    val description: String = "(picture took at " + DateFormat.format("dd-MM-yyyy HH:mm:ss", System.currentTimeMillis()).toString() + ")",
 
     @ColumnInfo(name="imageURI")
     var imageURI: String = "",
