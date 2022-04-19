@@ -14,8 +14,8 @@ data class MemoryEntity(
     val description: String = "",
 
     @ColumnInfo(name="imageURI")
-    val imageURI: String = "",
+    var imageURI: String = "",
 
     @ColumnInfo(name = "timestamp")
-    val timestamp: Timestamp = Timestamp(System.currentTimeMillis()),
+    val timestamp: Long = System.currentTimeMillis(),
 )

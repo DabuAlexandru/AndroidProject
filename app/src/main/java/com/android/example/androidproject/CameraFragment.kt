@@ -21,19 +21,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import com.android.example.androidproject.database.MemoriesDatabase.Companion.getInstance
+import com.android.example.androidproject.database.MemoriesDatabaseDao
+import com.android.example.androidproject.database.MemoryEntity
 import com.android.example.androidproject.databinding.FragmentCameraBinding
+import com.android.example.androidproject.memories.MemoryEntityAdapter
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-typealias LumaListener = (luma: Double) -> Unit
-
-
-class CameraFragment : Fragment() {
+class CameraFragment : Fragment(), CoroutineScope {
     private lateinit var viewBinding: FragmentCameraBinding
     private lateinit var fragmentContext: Context
     private lateinit var fragmentActivity: FragmentActivity
+    private lateinit var databaseDaoInstance: MemoriesDatabaseDao
 
     private var imageCapture: ImageCapture? = null
 
     private lateinit var cameraExecutor: ExecutorService
+
+    private var job: Job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,8 +54,8 @@ class CameraFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         fragmentActivity = requireActivity()
-
-
+        val db = getInstance(fragmentContext)
+        databaseDaoInstance = db.memoriesDatabaseDao
     }
 
     override fun onCreateView(
@@ -53,7 +63,6 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentCameraBinding.inflate(layoutInflater)
-
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -83,6 +92,7 @@ class CameraFragment : Fragment() {
             }
         }
 
+
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(fragmentContext.contentResolver,
@@ -103,6 +113,11 @@ class CameraFragment : Fragment() {
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults){
                     val msg = "Photo capture succeeded: ${output.savedUri}"
+
+                    val newMemoryEntity = MemoryEntity(imageURI = output.savedUri.toString())
+                    lifecycleScope.launch {
+                        databaseDaoInstance.insert(newMemoryEntity)
+                    }
                     Toast.makeText(fragmentContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
                 }
@@ -152,6 +167,7 @@ class CameraFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        job.cancel()
         cameraExecutor.shutdown()
     }
 

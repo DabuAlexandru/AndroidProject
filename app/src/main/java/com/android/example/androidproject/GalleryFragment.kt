@@ -1,12 +1,20 @@
 package com.android.example.androidproject
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.example.androidproject.database.MemoriesDatabase
 import com.android.example.androidproject.databinding.FragmentGalleryBinding
+import com.android.example.androidproject.memories.MemoriesViewModel
+import com.android.example.androidproject.memories.MemoriesViewModelFactory
+import com.android.example.androidproject.memories.MemoryEntityAdapter
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,29 +43,29 @@ class GalleryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentGalleryBinding>(inflater,
-            R.layout.fragment_gallery,container,false)
+        val binding = DataBindingUtil.inflate<FragmentGalleryBinding>(
+            inflater,
+            R.layout.fragment_gallery, container, false
+        )
+        val adapter = MemoryEntityAdapter()
+        binding.memoriesList.adapter = adapter
+
+        val application = requireNotNull(this.activity).application
+        val dataSource = MemoriesDatabase.getInstance(application).memoriesDatabaseDao
+        val viewModelFactory = MemoriesViewModelFactory(dataSource, application)
+        val memoriesViewModel =
+            ViewModelProvider(this, viewModelFactory)[MemoriesViewModel::class.java]
+
+        memoriesViewModel.memories.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
+
+
+        binding.setLifecycleOwner(this)
+        binding.memoriesViewModel = memoriesViewModel
         // Inflate the layout for this fragment
         return binding.root
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GalleryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GalleryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
