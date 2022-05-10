@@ -103,6 +103,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 Toast.makeText(applicationContext, "Successfully authenticated with facebook.",
                     Toast.LENGTH_SHORT).show()
+                finish()
             }
             .addOnFailureListener {
                 Toast.makeText(applicationContext, "Facebook Authentication failed.",
