@@ -11,4 +11,22 @@
     <string name="camera">Camera</string>
     <string name="share_button_text">share</string>
     <string name="about_title_text">Find more about the app</string>
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">244569727871567</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb244569727871567</string>
+    <string name="facebook_client_token">9c7667a1dd4749448ddeced6f563f5ab</string>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login_button_text">Login</string>
+    <string name="register_button_text">Register</string>
+    <string name="logged_in_greetings">Welcome back!</string>
+    <string name="logout_button_text">Log Out</string>
 </resources>

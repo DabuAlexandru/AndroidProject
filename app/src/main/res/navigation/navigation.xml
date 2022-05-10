@@ -16,6 +16,12 @@
         <action
             android:id="@+id/action_titleFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_titleFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_titleFragment_to_loggedInFragment2"
+            app:destination="@id/loggedInFragment" />
     </fragment>
     <fragment
         android:id="@+id/galleryFragment"
@@ -36,4 +42,23 @@
         android:id="@+id/cameraFragment"
         android:name="com.android.example.androidproject.CameraFragment"
         android:label="CameraFragment" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.android.example.androidproject.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <activity
+        android:id="@+id/registerActivity"
+        android:name="com.android.example.androidproject.RegisterActivity"
+        android:label="activity_register"
+        tools:layout="@layout/activity_register" />
+    <fragment
+        android:id="@+id/loggedInFragment"
+        android:name="com.android.example.androidproject.LoggedInFragment"
+        android:label="fragment_logged_in"
+        tools:layout="@layout/fragment_logged_in" >
+        <action
+            android:id="@+id/action_loggedInFragment_to_titleFragment"
+            app:destination="@id/titleFragment" />
+    </fragment>
 </navigation>

@@ -1,12 +1,16 @@
 package com.android.example.androidproject
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.android.example.androidproject.databinding.ActivityMainBinding
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

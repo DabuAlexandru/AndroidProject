@@ -8,6 +8,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.android.example.androidproject.databinding.FragmentTitleBinding
 import android.view.MenuItem
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +39,7 @@ class TitleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val auth: FirebaseAuth = Firebase.auth
         val binding = DataBindingUtil.inflate<FragmentTitleBinding>(inflater,
             R.layout.fragment_title,container,false)
         // Inflate the layout for this fragment
@@ -44,6 +48,16 @@ class TitleFragment : Fragment() {
         }
         binding.mapsButton.setOnClickListener{ view : View ->
             view.findNavController().navigate(R.id.action_titleFragment_to_mapsFragment)
+        }
+        binding.loginButton.setOnClickListener{ view : View ->
+            run {
+                var navigationID = R.id.action_titleFragment_to_loginActivity
+                if (auth.currentUser != null) {
+                    navigationID = R.id.action_titleFragment_to_loggedInFragment2
+                }
+                view.findNavController()
+                    .navigate(navigationID)
+            }
         }
         setHasOptionsMenu(true)
         return binding.root
